@@ -14,7 +14,7 @@ function App() {
     <Router>
       <Switch>
         <Route exact path="/" component={PaginatedList} />
-        <Route exact path="/detail" component={Chardetail} />
+        <Route exact path="/:name" component={Chardetail} />
       </Switch>
     </Router>
   );
