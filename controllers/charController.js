@@ -130,7 +130,9 @@ function paginatedResults(model) {
     }
     else {
       try {
-        results.results = await model.find({$text: {$search: search}}).limit(limit).skip(startIndex).exec()
+        results.results = await model.find({name: {$regex: new RegExp(search, "i")}})
+          .limit(limit)
+          .skip(startIndex).exec()
         res.paginatedResults = results
         next()
       } catch (e) {

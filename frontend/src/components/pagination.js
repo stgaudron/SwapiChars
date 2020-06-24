@@ -14,6 +14,7 @@ export default function Pagination ({ charsPerPage, totalChars, paginate }){
       display: 'block',
       marginLeft: 'auto',
       marginRight: 'auto',
+      paddingRight: '5',
     },
     pagination:{
       flexGrow : 1,
@@ -24,14 +25,14 @@ export default function Pagination ({ charsPerPage, totalChars, paginate }){
   const classes = useStyles();
 
   return (
-    <div >
+    <div style={{display: 'flex',  justifyContent:'center'}}>
 
     <ul className={classes.list}>
         {pageNumbers.map(number => (
           <li key={number} className={classes.pagination}>
-            <a onClick={() => paginate(number)} >
+            <button onClick={() => paginate(number)} >
               {number}
-            </a>
+            </button>
           </li>
         ))}
       </ul>

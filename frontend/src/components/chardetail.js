@@ -27,8 +27,6 @@ export default function Chardetail(props) {
 
   const details = data ? data : {};
 
-  console.log("Chardetail", props, details)
-
   if (error)
     return <div>{error.message}</div>;
 
