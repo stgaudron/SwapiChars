@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles} from '@material-ui/core/styles';
+import { Button, ButtonGroup } from '@material-ui/core';
 
 
 export default function Pagination ({ charsPerPage, totalChars, paginate }){
@@ -21,21 +22,22 @@ export default function Pagination ({ charsPerPage, totalChars, paginate }){
       display: 'inline',
       textAlign: 'center',
       },
+    pager:{
+      textAlign: "center",
+      marginTop: theme.spacing(2)
+    }
   }));
   const classes = useStyles();
 
   return (
-    <div style={{display: 'flex',  justifyContent:'center'}}>
-
-    <ul className={classes.list}>
+    <div className={classes.pager}>
+      <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
         {pageNumbers.map(number => (
-          <li key={number} className={classes.pagination}>
-            <button onClick={() => paginate(number)} >
-              {number}
-            </button>
-          </li>
+          <Button key={number} onClick={() => paginate(number)} >
+            {number}
+          </Button>
         ))}
-      </ul>
+      </ButtonGroup>
     </div>
   );
 };

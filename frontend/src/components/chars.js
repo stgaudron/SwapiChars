@@ -6,6 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { Link as RouterLink} from 'react-router-dom';
 import Link from '@material-ui/core/Link';
+import {CircularProgress} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,6 +21,10 @@ const useStyles = makeStyles((theme) => ({
       gridGap: theme.spacing(1),
     }
   },
+  progress: {
+    textAlign: "center",
+    marginTop: theme.spacing(2)
+  }
 }));
 
 export default function Chars ({ chars, loading }) {
@@ -27,7 +32,7 @@ export default function Chars ({ chars, loading }) {
 const classes = useStyles();
 
   if (loading) {
-    return <h2>Loading...</h2>;
+    return <div className={classes.progress}><CircularProgress color="secondary" /></div>;
   }
 
 

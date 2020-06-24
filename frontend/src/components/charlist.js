@@ -3,6 +3,7 @@ import Pagination from './pagination';
 import Chars from './chars';
 import useSWR from 'swr';
 import fetcher from './fetcher';
+import TextField from '@material-ui/core/TextField';
 
 
 export default function PaginatedList() {
@@ -22,21 +23,14 @@ export default function PaginatedList() {
 
   const handleOnInputChange = useCallback((event) => {
     setQuery(event.target.value)
-  }, [setQuery]);
+    if(currentPage !== 1) setCurrentPage(1)
+  }, [setQuery, currentPage, setCurrentPage]);
 
   return (
     <div>
       <div style={{display: 'flex',  justifyContent:'center'}}>
-        <label className="search-label" htmlFor="search-input">
-          <input
-            type="text"
-            name="query"
-            value={query}
-            id="search-input"
-            placeholder="Search by name"
-            onChange={handleOnInputChange}
-          />
-        </label>
+
+        <TextField placeholder="Search by name" value={query} onChange={handleOnInputChange} />
       </div>
       <Chars chars={currentChar} loading={loading} />
       <Pagination charsPerPage={charsPerPage} totalChars={chars.length} paginate={setCurrentPage} />
