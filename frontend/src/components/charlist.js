@@ -1,9 +1,10 @@
-import React, {useState, useEffect, useMemo, useCallback} from 'react';
+import React, {useState, useMemo, useCallback} from 'react';
 import Pagination from './pagination';
 import Chars from './chars';
 import useSWR from 'swr';
 import fetcher from './fetcher';
 import TextField from '@material-ui/core/TextField';
+import { debounce } from '@material-ui/core';
 
 
 export default function PaginatedList() {
@@ -21,16 +22,16 @@ export default function PaginatedList() {
     return chars.slice(indexOfFirstChar, indexOfLastChar)
   }, [chars, currentPage, charsPerPage]);
 
-  const handleOnInputChange = useCallback((event) => {
-    setQuery(event.target.value)
+  const handleOnInputChange = useCallback(debounce((input) => {
+    setQuery(input)
     if(currentPage !== 1) setCurrentPage(1)
-  }, [setQuery, currentPage, setCurrentPage]);
+  }, 200), [setQuery, currentPage, setCurrentPage]);
 
   return (
     <div>
       <div style={{display: 'flex',  justifyContent:'center'}}>
 
-        <TextField placeholder="Search by name" value={query} onChange={handleOnInputChange} />
+        <TextField placeholder="Search by name" defaultValue={query} onChange={(e) => handleOnInputChange(e.target.value)} />
       </div>
       <Chars chars={currentChar} loading={loading} />
       <Pagination charsPerPage={charsPerPage} totalChars={chars.length} paginate={setCurrentPage} />
