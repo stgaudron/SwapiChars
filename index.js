@@ -22,4 +22,5 @@ app.get("/*", (req, res) => res.sendFile(path.join(__dirname, "./frontend/build"
 
 app.listen(4000, () => {
     console.log('Express server started at port : 4000');
+    console.log('browse http://localhost:4000');
 });
