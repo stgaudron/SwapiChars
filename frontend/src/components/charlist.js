@@ -1,46 +1,29 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import Pagination from './pagination';
 import Chars from './chars';
-import axios from 'axios';
-
+import useSWR from 'swr';
+import fetcher from './fetcher';
 
 
 export default function PaginatedList() {
-  const [chars, setChars] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [charsPerPage] = useState(12);
   const [query, setQuery] = useState('');
   console.log(query)
 
-  const fetchChars = async (query) => {
+  const { data, error } = useSWR(`/char?search=${query}`, fetcher);
+  const chars = useMemo(() => data ? data.results : [], [data]);
+  const loading = useMemo(() => !data && !error, [data, error]);
 
-    console.log(query);
-    setLoading(true);
-    const res = await axios.get(`http://localhost:4000/char?search=${query}`);
-    setChars(res.data.results);
-    setLoading(false);
-  };
+  const currentChar = useMemo(() => {
+    const indexOfLastChar = currentPage * charsPerPage
+    const indexOfFirstChar = indexOfLastChar - charsPerPage
+    return chars.slice(indexOfFirstChar, indexOfLastChar)
+  }, [chars, currentPage, charsPerPage]);
 
-  useEffect((query) => {
-    if (typeof query ==! "undefined")
-      fetchChars(query);
-
-  },[query]);
-
-  const indexOfLastChar = currentPage * charsPerPage;
-  const indexOfFirstChar = indexOfLastChar - charsPerPage;
-  const currentChar = chars.slice(indexOfFirstChar, indexOfLastChar);
-
-  const paginate = pageNumber => setCurrentPage(pageNumber);
-
-  function handleOnInputChange ( event ) {
-
-    const query= event.target.value;
-    setQuery(query);
-    fetchChars (query);
-  };
-
+  const handleOnInputChange = useCallback((event) => {
+    setQuery(event.target.value)
+  }, [setQuery]);
 
   return (
     <div>
@@ -57,7 +40,7 @@ export default function PaginatedList() {
         </label>
       </div>
       <Chars chars={currentChar} loading={loading} />
-      <Pagination charsPerPage={charsPerPage} totalChars={chars.length} paginate={paginate} />
+      <Pagination charsPerPage={charsPerPage} totalChars={chars.length} paginate={setCurrentPage} />
     </div>
 
   );

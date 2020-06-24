@@ -1,11 +1,12 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import axios from 'axios';
 import useSWR from 'swr';
+import fetcher from './fetcher'
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+
 
 
 
@@ -15,15 +16,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const fetcher = async (...args) => {
-  const response = await axios(...args);
-  return response.data;
-}
-
 export default function Chardetail(props) {
   const classes = useStyles();
 
-  const {data, error} = useSWR(() => "http://localhost:4000/char/" + props.match.params.name, fetcher)
+  const {data, error} = useSWR(() => "/char/" + props.match.params.name, fetcher)
 
   const details = data ? data : {};
 
