@@ -11,17 +11,22 @@ export default function PaginatedList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [charsPerPage] = useState(12);
   const [query, setQuery] = useState('');
+  console.log(query)
 
   const fetchChars = async (query) => {
+
+    console.log(query);
     setLoading(true);
     const res = await axios.get(`http://localhost:4000/char?search=${query}`);
     setChars(res.data.results);
     setLoading(false);
   };
 
-  useEffect(() => {
-    fetchChars(query);
-  },[]);
+  useEffect((query) => {
+    if (typeof query ==! "undefined")
+      fetchChars(query);
+
+  },[query]);
 
   const indexOfLastChar = currentPage * charsPerPage;
   const indexOfFirstChar = indexOfLastChar - charsPerPage;
@@ -31,7 +36,8 @@ export default function PaginatedList() {
 
   function handleOnInputChange ( event ) {
 
-    setQuery(event.target.value);
+    const query= event.target.value;
+    setQuery(query);
     fetchChars (query);
   };
 
