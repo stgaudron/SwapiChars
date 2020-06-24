@@ -9,7 +9,6 @@ export default function PaginatedList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [charsPerPage] = useState(12);
   const [query, setQuery] = useState('');
-  console.log(query)
 
   const { data, error } = useSWR(`/char?search=${query}`, fetcher);
   const chars = useMemo(() => data ? data.results : [], [data]);
