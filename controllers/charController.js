@@ -97,10 +97,6 @@ function paginatedResults(model) {
     const limit = parseInt(req.query.limit)
     const search = req.query.search
 
-    console.log(page);
-    console.log(limit);
-    console.log(search);
-
     const startIndex = (page - 1) * limit
     const endIndex = page * limit
 
