@@ -40,7 +40,7 @@ router.post('/', (req,res) => {
 // });
 
 router.get('/:name', (req,res) => {
-  Char.find({name: req.params.name}, (err, char) => {
+  Char.findOne({name: req.params.name}, (err, char) => {
     if (err) res.status(400).send(err)
     console.log(char);
     res.json(char)

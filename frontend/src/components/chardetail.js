@@ -1,53 +1,53 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
+import useSWR from 'swr';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
 
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    '& > *': {
-      margin: theme.spacing(1),
-      width: theme.spacing(16),
-      height: theme.spacing(16),
+    flexGrow: 1,
     },
-  },
 }));
 
-export default function Chardetail({name}) {
+const fetcher = async (...args) => {
+  const response = await axios(...args);
+  return response.data;
+}
+
+export default function Chardetail(props) {
   const classes = useStyles();
-  const [details, setDetails] = useState({});
-  const [loading, setLoading] = useState(false);
 
-  useEffect(({name}) => {
-    const fetchDetails = async () => {
-      setLoading(true);
-      const res = await axios.get("http://localhost:4000/char/"+name);
-      setDetails(res.data);
-      setLoading(false);
-    };
+  const {data, error} = useSWR(() => "http://localhost:4000/char/" + props.match.params.name, fetcher)
 
-    fetchDetails();
-  }, []);
+  const details = data ? data : {};
+
+  console.log("Chardetail", props, details)
+
+  if (error)
+    return <div>{error.message}</div>;
 
   return (
     <div className={classes.root}>
-      <Paper elevation={2}>
-        <Typography variant="body2" color="textSecondary" component="p">
-          Birth Year : {details.birth_year} < br/>
-          Eye Color : {details.eye_color} < br/>
-          Gender : {details.gender} < br/>
-          Hair Color : {details.hair_color} < br/>
-          Height : {details.height} < br/>
-          Mass : {details.mass} < br/>
-          Skin Color : {details.skin_color} < br/>
-        </Typography>
-      </Paper>
-
+      <Card>
+        <CardHeader title={details.name} />
+          <CardContent>
+            <Typography variant="body2" color="textSecondary" component="p">
+              Birth Year : {details.birth_year} < br/>
+              Eye Color : {details.eye_color} < br/>
+              Gender : {details.gender} < br/>
+              Hair Color : {details.hair_color} < br/>
+              Height : {details.height} < br/>
+              Mass : {details.mass} < br/>
+              Skin Color : {details.skin_color} < br/>
+            </Typography>
+          </CardContent>
+      </Card>
     </div>
   );
 }

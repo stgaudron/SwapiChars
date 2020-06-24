@@ -4,7 +4,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  useHistory
 } from "react-router-dom";
 import PaginatedList from './components/charlist';
 import Chardetail from './components/chardetail';;
